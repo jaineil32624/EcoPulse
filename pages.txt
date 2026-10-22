@@ -1,0 +1,7 @@
+== POST pages/builds
+{"message":"Page is disabled because current plan does not support private GitHub Pages","documentation_url":"https://docs.github.com/rest/pages/pages#request-a-apiname-pages-build","status":"422"}gh: Page is disabled because current plan does not support private GitHub Pages (HTTP 422)
+
+== builds
+built	5e5d00af5ea5e761bf5f2710d77d0c0e4ab58469	2026-07-01T02:36:53Z	
+built	744f12450ba28999313ad99bde1c70a045c2d813	2026-07-01T02:32:32Z	
+built	744f12450ba28999313ad99bde1c70a045c2d813	2026-07-01T02:25:52Z	

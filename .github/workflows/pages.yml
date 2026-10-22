@@ -3,7 +3,7 @@ name: Build & Deploy (GitHub Pages)
 # On every push to main:
 #   1. npm ci + npm run build (tsc type-check + vite build)
 #   2. publish dist/ to the `build-preview` branch (handy for inspecting the real build)
-#   3. deploy dist/ to GitHub Pages
+#   3. deploy dist/ to the gh-pages branch, which GitHub Pages serves
 # If the build fails, the tail of the log is pushed to the `build-log` branch.
 on:
   push:
@@ -12,8 +12,6 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
@@ -58,17 +56,11 @@ jobs:
           git -c user.name="github-actions[bot]" -c user.email="41898299+github-actions[bot]@users.noreply.github.com" commit -qm "Build preview for ${GITHUB_SHA}"
           git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" build-preview
 
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Deploy dist/ to gh-pages branch (GitHub Pages source)
+        run: |
+          cp -r dist /tmp/site && cd /tmp/site
+          touch .nojekyll
+          git init -q -b gh-pages
+          git add -A
+          git -c user.name="github-actions[bot]" -c user.email="41898299+github-actions[bot]@users.noreply.github.com" commit -qm "Deploy ${GITHUB_SHA}"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" gh-pages

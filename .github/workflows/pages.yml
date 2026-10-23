@@ -3,7 +3,9 @@ name: Build & Deploy (GitHub Pages)
 # On every push to main:
 #   1. npm ci + npm run build (tsc type-check + vite build)
 #   2. publish dist/ to the `build-preview` branch (handy for inspecting the real build)
-#   3. deploy dist/ to the gh-pages branch, which GitHub Pages serves
+#   3. deploy dist/ to the gh-pages branch AND via the GitHub Pages Actions deployment,
+#      so the site works whichever Pages source is selected in Settings -> Pages
+#      ("Deploy from a branch: gh-pages" or "GitHub Actions").
 # If the build fails, the tail of the log is pushed to the `build-log` branch.
 on:
   push:
@@ -12,6 +14,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: pages
@@ -35,6 +39,8 @@ jobs:
         run: |
           set -o pipefail
           npm run build 2>&1 | tee build.log
+          # screenshots are used as the social-preview image (og:image)
+          mkdir -p dist/docs && cp -r docs/screenshots dist/docs/
 
       - name: Push build log on failure
         if: failure()
@@ -64,3 +70,20 @@ jobs:
           git add -A
           git -c user.name="github-actions[bot]" -c user.email="41898299+github-actions[bot]@users.noreply.github.com" commit -qm "Deploy ${GITHUB_SHA}"
           git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" gh-pages
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    # Only succeeds when Settings -> Pages -> Source is "GitHub Actions"; harmless otherwise.
+    needs: build
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

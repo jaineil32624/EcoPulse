@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#eaf7ee"/>
+      <stop offset="1" stop-color="#cfe9d8"/>
+    </linearGradient>
+    <linearGradient id="leaf" x1="120" y1="420" x2="400" y2="90" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3b7d55"/>
+      <stop offset="0.55" stop-color="#5ea97a"/>
+      <stop offset="1" stop-color="#9ad6a6"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="360" cy="140" r="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="116" fill="url(#bg)"/>
+  <circle cx="360" cy="140" r="200" fill="url(#glow)"/>
+  <!-- leaf -->
+  <path d="M118 400 C 96 250, 196 108, 404 100 C 414 300, 300 418, 118 400 Z" fill="url(#leaf)"/>
+  <!-- midrib -->
+  <path d="M136 384 C 210 300, 290 214, 372 138" fill="none" stroke="#eaf7ee" stroke-opacity="0.55" stroke-width="10" stroke-linecap="round"/>
+  <!-- pulse line -->
+  <path d="M70 300 H 178 L 210 236 L 250 352 L 286 262 L 306 300 H 442" fill="none" stroke="#ffffff" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M70 300 H 178 L 210 236 L 250 352 L 286 262 L 306 300 H 442" fill="none" stroke="#1f4832" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="442" cy="300" r="18" fill="#f2c94c" stroke="#1f4832" stroke-width="8"/>
+</svg>
